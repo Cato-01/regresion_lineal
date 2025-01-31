@@ -22,3 +22,16 @@ plt.ylabel("$f_{\mathbf{w}}(x)$", fontsize=20)
 plt.title(rf"$f_{{\mathbf{{w}}}}(x) = {true_coeffs[1]} x + {true_coeffs[0]} + \epsilon$, where $\epsilon \sim \mathcal{{N}}(\mu=0, \sigma={noise_std})$", fontsize=20)
 plt.legend()
 plt.show()
+
+# 5. Split the data into training and testing sets using train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42, shuffle=True)
+
+# 6. Visualise the generated train and test synthetic dat sets
+plt.figure(figsize=(10,7))
+plt.scatter(x_test, y_test, label='Testing dataset')
+plt.scatter(x_train, y_train, label='Training dataset', color=[1,0,0])
+plt.xlabel(r"$x$", fontsize=20)
+plt.ylabel("$f_{\mathbf{w}}(x)$", fontsize=20)
+plt.title(rf"$f_{{\mathbf{{w}}}}(x) = {true_coeffs[1]} x + {true_coeffs[0]} + \epsilon$, where $\epsilon \sim \mathcal{{N}}(\mu=0, \sigma={noise_std})$", fontsize=20)
+plt.legend()
+plt.show()
