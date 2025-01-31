@@ -35,3 +35,41 @@ plt.ylabel("$f_{\mathbf{w}}(x)$", fontsize=20)
 plt.title(rf"$f_{{\mathbf{{w}}}}(x) = {true_coeffs[1]} x + {true_coeffs[0]} + \epsilon$, where $\epsilon \sim \mathcal{{N}}(\mu=0, \sigma={noise_std})$", fontsize=20)
 plt.legend()
 plt.show()
+
+# 7. Build the linear regression model using a multiple-input single neuron
+model = tf.keras.Sequential([tf.keras.layers.Input(shape=(1,)), tf.keras.layers.Dense(1)])
+
+# 8. Compile the model
+opt = tf.keras.optimizers.Adam(learning_rate=200)
+model.compile(optimizer=opt, loss='mse')
+
+# 9. Add EarlyStopping callback
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=6, verbose=1)
+
+# 10. Train the model
+start_time = time.time()
+model.fit(x_train, y_train, epochs=3000, batch_size=5, validation_split=0.10, verbose=1, callbacks=[early_stopping])
+print(f"\nElapsed time: {time.time() - start_time} sec")
+
+# 11. Evaluate the model
+loss = model.evaluate(x_test, y_test)
+print(f'\nTest Loss: {loss}')
+
+# 12. Print the weights of the trained model
+weights = model.layers[0].get_weights()
+print(f"Weights [w1]: {weights[0]}")
+print(f"Bias [w0]: {weights[1]}")
+
+# 13. Make predictions
+y_pred_test = model.predict(x_test)
+
+# 14. Plot the results
+plt.figure(figsize=(10, 7))
+plt.scatter(x_train, y_train, label='Training data')
+plt.plot(x_test, y_pred_test, label='Model', linewidth=3, color=[1,0,0])
+plt.xlabel(r'$x$', fontsize=20)
+plt.ylabel("$\hat{f}_{\mathbf{w}}(x)$", fontsize=20)
+plt.legend()
+plt.show()
+
+model.summary()
